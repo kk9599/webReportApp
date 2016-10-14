@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% import "_macros.html" as macros %}
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static',filename='js/plotly-1.5.0.min.js') }}"></script>
+    <script >
+        {{ macros.plotData(joblist,"Calculate") }}
+        var cal =data;
+        {{ macros.plotData(joblist,"Lock") }}
+        var lock = data;
+        {{ macros.plotData(joblist,"Validate") }}
+        var validate = data;
+        {{ macros.plotData(joblist,"Commit") }}
+        var commit =data;
+
+        var layout = {
+            title:'ReCal',
+            xaxis: {
+
+                tickfont: {
+                size: 14,
+                color: 'rgb(107, 107, 107)'
+            }},
+            yaxis:{
+                title: 'Execution Time (sec)',
+                showline: true,
+                showgrid: true,
+                gridcolor: '#bdbdbd',
+                gridwidth: 2
+            }
+
+        };
+
+        Plotly.newPlot('chartContainer', cal,layout);
+        Plotly.newPlot('chartContainer2', lock,layout);
+        Plotly.newPlot('chartContainer3', validate,layout);
+        Plotly.newPlot('chartContainer4', commit,layout);
+
+        $('#example').DataTable();
+    </script>
+
+{% endblock %}
+{% block page_content %}
+
+    <div class="container-fluid">
+        <div class="article">
+            <div class="section">
+                <ul class="nav nav-pills">
+                    <li class="active"><a data-toggle="tab" href="#Cal">Cal</a></li>
+                    <li><a data-toggle="tab" href="#Lock">Lock</a></li>
+                    <li><a data-toggle="tab" href="#Validate">Validate</a></li>
+                    <li><a data-toggle="tab" href="#Commit">Commit</a></li>
+                </ul>
+
+                <div class="tab-content col-md-7">
+                    <div id="Cal" class="tab-pane fade in active">
+                        <div id="chartContainer" style="height: 500px;"></div>
+                    </div>
+                    <div id="Lock" class="tab-pane fade">
+                        <div id="chartContainer2" style="height: 500px;"></div>
+                    </div>
+                    <div id="Validate" class="tab-pane fade">
+                        <div id="chartContainer3"style="height: 500px;"></div>
+                    </div>
+                    <div id="Commit" class="tab-pane fade">
+                        <div id="chartContainer4" style="height: 500px;"></div>
+                    </div>
+                </div>
+                <div class="chartTable col-md-7 ">
+                    {{ macros.chartTable(joblist) }}
+                </div>
+                <div class="bje_log"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+{% endblock %}

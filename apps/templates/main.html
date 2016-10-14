@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %} Payroll Performance Report{% endblock title %}
+{% block scripts %}
+<script type="text/javascript" >
+
+        var buildid = 2230;
+        window.onload = function (){
+            $.ajax(
+                    {
+                        url:"/"+buildid,
+                        dataType: "json",
+                        success: function(result){
+                            renderChar(result);
+                            printId(buildid);
+                        }
+                    }
+            );
+
+        }
+
+        function renderChar(dataInput) {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                theme: "theme2",//theme1
+                title:{
+                    text: "Basic Column Chart - CanvasJS"
+                },
+                animationEnabled: true,   // change to true
+                data:dataInput
+            });
+            chart.render();
+        }
+
+        function printId (id){
+
+            console.log(id);
+
+        }
+
+
+</script>
+{{super()}}
+{% endblock %}
+
+{% block page_content %}
+<div class="container-fluid">
+
+     <div class="article">
+        <div class="section">
+            <!--p>${ENV:BUILD_ID}</p-->
+            <div class="row">
+                <div class="col-md-1"></div>
+            <div id="chartContainer" class="col-md-7" style="height: 300px;"></div>
+                <div class="col-md-2"></div>
+                 <div class="loader"></div>
+              <h1>{{ result }}</h1>
+            </div>
+            <div class="chartTable"></div>
+            <div class="bje_log"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block styles %}
+    <style>
+    .loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+    </style>
+
+{% endblock %}

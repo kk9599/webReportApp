@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> vuejs demo </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.2.1/css/bulma.css"/>
+
+</head>
+<body>
+<section class="section">
+    <div class="container is-fluid">
+        <div id="app">
+            <div class="columns">
+                <div class="column is-3">
+                    <aside class="menu">
+                        <p class="menu-label">
+                            TestCases
+                        </p>
+                        <ul class="menu-list">
+                            <test-menu v-for="menu in testMenu" :menu="menu"></test-menu>
+                        </ul>
+                    </aside>
+                </div>
+                <div class="column">
+                    <job-tab></job-tab>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <p>{{ message }}</p>
+                    <pre>{{ $data|json }}</pre>
+                </div>
+
+            </div>
+            <template id ="menu1">
+                <li><a href="#">{{menu.testName}}</a></li>
+            </template>
+            <template id ="jobTab">
+                <div class="tabs is-boxed">
+                    <ul>
+                        <li class="is-active">
+                            <a href="#">
+                                <span class="icon is-small"><i class="fa fa-image"></i></span>
+                                <span>Pictures</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon is-small"><i class="fa fa-music"></i></span>
+                                <span>Music</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon is-small"><i class="fa fa-film"></i></span>
+                                <span>Videos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon is-small"><i class="fa fa-file-text-o"></i></span>
+                                <span>Documents</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </template>
+
+
+        </div><!--end vue app-->
+
+    </div>
+</section>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.min.js"></script>
+<script type="text/javascript" src ="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.0.3/vue-resource.js"></script>
+<script type="text/javascript" src ="https://cdnjs.cloudflare.com/ajax/libs/vue-router/0.7.13/vue-router.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script   src="http://code.jquery.com/jquery-2.2.4.js"   integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="   crossorigin="anonymous"></script>
+<script type="text/javascript">
+    Vue.component('test-menu',{
+        template: "#menu1",
+        props:['menu'],
+    });
+    Vue.component('job-tab',{
+        template: '#jobTab',
+        active : true,
+
+        method:{
+            tabClick : function(){
+
+                }
+            }
+
+        }
+    });
+
+
+
+    var vm = new Vue(
+            {
+                el: "#app",
+                data: {
+                    message : "hello world",
+                    testMenu : []
+                },
+                ready:function(){
+                    this.$http({url:'/api/job',}).then()
+                    $.get('/api/job',function(data){
+                        vm.testMenu=data;
+                    })
+
+                }
+
+            }
+
+
+
+    );
+
+
+
+
+
+</script>
+</body>
+</html>

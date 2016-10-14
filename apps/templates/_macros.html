@@ -1,0 +1,74 @@
+{% macro chartData(joblist, jobmode) %}
+    var data =[
+    {
+    // Change type to "bar", "area", "spline", "pie",etc.
+    type: "column",
+
+    dataPoints: [
+    {% for job in joblist %}
+        {% if job.JobMode ==jobmode %}
+            {% if job == joblist[-1] %}
+                { label: "{{ job.PayGroupName }}",  y: {{ job.ExecutionTime }}}
+            {% else %}
+                { label: "{{ job.PayGroupName }}",  y: {{ job.ExecutionTime }}},
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    ]
+    }
+    ]
+{% endmacro %}
+
+{% macro plotData (joblist, jobmode) %}
+    var xname =[];
+    var yvalue =[];
+    {% for job in joblist %}
+           {% if job.JobMode ==jobmode %}
+               xname.push("{{job.PayGroupName }}");
+               yvalue.push({{ job.ExecutionTime}});
+            {% endif %}
+    {% endfor %}
+var data =[
+    {
+          x: xname,
+          y: yvalue,
+          marker:{
+            color:  'rgb(158,202,225)',
+            opacity: 0.4
+                 },
+      type: 'bar'
+    }
+    ];
+{% endmacro %}
+
+{% macro chartTable(joblist) %}
+    <table id="example" class="table table-striped table-bordered table-responsive">
+        <thead>
+        <tr>
+            <th>PayRunId</th>
+            <th>PayGroupName </th>
+            <th>NumEmpl</th>
+            <th>JobMode</th>
+            <th>ExecutionTime</th>
+            <th>StartTime</th>
+            <th>EndTime</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for job in joblist %}
+            <tr>
+                <td>{{ job.PayRunId }}</td>
+                <td>{{ job.PayGroupName }}</td>
+                <td>{{job.NumEmpl}}</td>
+                <td>{{job.JobMode}}</td>
+                <td>{{ job.ExecutionTime }}</td>
+                <td>{{ job.StartTime }}</td>
+                <td>{{job.EndTime }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+
+    </table>
+
+{% endmacro %}
